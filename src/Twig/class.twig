@@ -1,0 +1,21 @@
+<?php
+namespace {{ namespace }};
+
+{% if mock.type == 'Mockery' %}
+use Mockery as m;
+{% endif %}
+{% for use in uses %}
+use {{ use.class }} as {{ use.alias }};
+{% endfor %}
+
+class {{ name ~ 'Test' }} extends \PHPUnit_Framework_TestCase
+{
+{% if setup %}
+{% include "setup.twig" %}
+
+{% include "teardown.twig" %}
+{% endif %}
+{% for function in functions %}
+{% include "function.twig" %}
+{% endfor %}
+}

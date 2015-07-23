@@ -1,0 +1,21 @@
+{% for arg in setup.args %}
+{% if arg.mock %}
+    /** @var \{{ arg.mock|raw }} */
+{% endif %}
+    protected {{ arg.name|raw }};
+
+{% endfor %}
+    /** @var {{ name|raw }} */
+    protected ${{ setup.testedClassVar|raw }};
+
+    public function setUp()
+    {
+{% for arg in setup.args %}
+{% if arg.mock %}
+        {{ arg.nameWithThis|raw }} = {% include mock.type ~ '/variable_mock.twig' with {'class' : arg.mock} %};
+{% else %}
+        {{ arg.nameWithThis|raw }} = ?; //TODO
+{% endif %}
+{% endfor %}
+        $this->{{ setup.testedClassVar|raw }} = new {{ name|raw }}({{ setup.argString|raw }});
+    }

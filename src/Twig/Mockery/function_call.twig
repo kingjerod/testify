@@ -1,0 +1,5 @@
+{% if call.args %}
+    {{ call.variable|raw }}->shouldReceive('{{ call.function|raw }}')->with({{ call.args|raw }})->andReturn(?); //TODO
+{% else %}
+    {{ call.variable|raw }}->shouldReceive('{{ call.function|raw }}')->andReturn(?); //TODO
+{% endif %}

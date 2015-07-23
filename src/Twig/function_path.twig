@@ -1,0 +1,14 @@
+{% if path.functionCalls|length > 0 %}
+
+{% if path.type == 'function' %}
+        // Function calls to expect outside any control paths
+{% else %}
+        // Function calls to expect inside the {{ path.type }}(Line {{ path.line }}) control block
+{% endif %}
+{% for call in path.functionCalls %}
+    {% include mock.type ~ '/function_call.twig' with {'call' : call} %}
+{% endfor %}
+{% endif %}
+{% for child in path.children %}
+{% include "function_path.twig" with {'path' : child} %}
+{% endfor %}

@@ -1,0 +1,32 @@
+
+    public function test{{ function.name[:1]|upper ~ function.name[1:] }}()
+    {
+{% if function.flatPaths|length > 1 %}
+        /**
+         * This function has {{ function.flatPaths|length }} different code paths. They look like:
+{% set pathCount = 1 %}
+{% for path in function.flatPaths  %}
+         * {{ pathCount }}) {{ path|join(' -> ')|raw }}
+{% set pathCount = pathCount + 1 %}
+{% endfor %}
+         */
+
+{% endif %}
+{% if function.arguments|length > 0 %}
+        // Arguments to pass into the function being tested
+{% for arg in function.arguments %}
+{% if arg.mock %}
+        {{ arg.name }} = {% include mock.type ~ '/variable_mock.twig' with {'class' : arg.mock} %};
+{% else %}
+        {{ arg.name }} = ?; //TODO
+{% endif %}
+{% endfor %}
+{% endif %}
+{% for path in function.paths %}
+{% include "function_path.twig" with {'path' : path} %}
+{% endfor %}
+
+        $expected = ?; //TODO
+        $result = $this->{{ setup.testedClassVar|raw }}->{{ function.name|raw }}({{ function.argString|raw }});
+        $this->assertSame($expected, $result);
+    }

@@ -1,0 +1,7 @@
+    public function tearDown()
+    {
+{% for arg in setup.args %}
+        unset({{ arg.nameWithThis|raw }});
+{% endfor %}
+        unset($this->{{ setup.testedClassVar|raw }});
+    }
